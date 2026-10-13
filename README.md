@@ -2,7 +2,7 @@
 
 **An AI agent that builds other AI agents.** It reads a bank's documents and creates a working phone agent on [Freya](https://www.freyavoice.ai), with no edits by hand.
 
-🏆 **[6th place](https://www.freyavoice.ai/hackathon/leaderboard)** at [Build the Builder](https://www.freyavoice.ai/hackathon) — [Freya](https://www.freyavoice.ai) × [Y Combinator](https://events.ycombinator.com/AI-FDE-Build-the-Builder) (October 10–11, 2026). Team **Cracked Engineers**.
+🏆 **[6th place](https://www.freyavoice.ai/hackathon/leaderboard)** at Build the Builder — Freya × Y Combinator (October 10–11, 2026). Team **Cracked Engineers**.
 
 ![Build the Builder — Freya × Y Combinator](docs/images/hackathon-cover.jpg)
 
