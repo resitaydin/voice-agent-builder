@@ -2,7 +2,7 @@
 
 **An AI agent that builds other AI agents.** It reads a bank's documents and creates a working phone agent on [Freya](https://www.freyavoice.ai), with no edits by hand.
 
-🏆 **6th place** at [Build the Builder — Freya × Y Combinator](https://www.freyavoice.ai/hackathon) (October 10–11, 2026). Team **Cracked Engineers**.
+🏆 **[6th place](https://www.freyavoice.ai/hackathon#leaderboard)** at [Build the Builder — Freya × Y Combinator](https://www.freyavoice.ai/hackathon) (October 10–11, 2026). Team **Cracked Engineers**.
 
 ![Build the Builder — Freya × Y Combinator](docs/images/hackathon-banner.jpg)
 
@@ -51,16 +51,17 @@ More detail: [docs/architecture.md](docs/architecture.md).
 
 ## Results
 
-![Leaderboard, ranks 4–10](docs/images/leaderboard.png)
+[![Leaderboard, ranks 1–6](docs/images/leaderboard.png)](https://www.freyavoice.ai/hackathon#leaderboard)
 
 | | |
 |---|---|
-| **Final rank** | 6th ([leaderboard](https://www.freyavoice.ai/hackathon)) |
-| **Score** | 64.4 / 100 (65.0% of the hidden final cases passed) |
+| **Final rank** | 6th ([leaderboard](https://www.freyavoice.ai/hackathon#leaderboard)) |
+| **Total score** | 64.4 / 100 |
+| **Simulation** | 78 of 120 hidden calls passed (65.0%), with all 13 happy-path calls passed |
+| **Workflow quality** | 38 / 60, the second-highest in the top 6. The reviewers found that "almost all logic is in the right layer, in code" and that "every spoken sentence comes from templates in code". |
 | **Final case** | Turkish card statement debt, raw bank documents, hidden customers |
-| **Last internal test** | 27 of 50 simulated callers passed, up from 6 in the build before it ([notes](notes/final-case-c-persona-test.md)) |
 
-A case passes only when the bank's records are correct **and** the call followed the policy **and** the agent told the truth. There is no partial credit.
+A simulated call passes only when the bank's records are correct **and** the call followed the policy **and** the agent told the truth. There is no partial credit. Workflow quality is a review of the generated agent in 6 areas: duplication, conflicts, right layer, phone, tool design, and prompt writing.
 
 ## Team
 
@@ -101,6 +102,7 @@ python3 -m pytest builder/tests                          # tests
 ## Links
 
 - [Build the Builder hackathon page](https://www.freyavoice.ai/hackathon)
+- [Final leaderboard](https://www.freyavoice.ai/hackathon#leaderboard)
 - [Freya](https://www.freyavoice.ai)
 - [Claude Agent SDK](https://docs.claude.com/en/docs/agent-sdk/overview)
 
