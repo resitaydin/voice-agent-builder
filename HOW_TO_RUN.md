@@ -5,7 +5,7 @@ Everything from a fresh machine to a finished build. Run it from the repository 
 **In short**
 
 ```
-git clone https://github.com/Tugaytalha/The-Builder.git && cd The-Builder
+git clone https://github.com/resitaydin/voice-agent-builder.git && cd voice-agent-builder
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt        # Windows: python -m venv .venv ; .venv\Scripts\pip install -r requirements.txt
 # put FREYA_API_KEY and FREYA_BANK_TEAM_KEY in env.sh (copy kit/env.example), then: source env.sh
 # log in to Claude (or set ANTHROPIC_API_KEY), see step 3 below
@@ -21,7 +21,7 @@ Tested from a fresh copy of the repository on Windows (`git clone`, Python 3.14)
 | | macOS / Linux (bash, zsh) | Windows (PowerShell) |
 |---|---|---|
 | Python 3.10 or newer (tested on 3.12 and 3.14) | `python3 --version` (Ubuntu and Debian also need `sudo apt install python3-venv`. The macOS `python3` is 3.9, which is too old: pip then says `No matching distribution found for claude-agent-sdk`. Use `brew install python@3.12` and `python3.12`, or `uv venv -p 3.12 .venv`) | `python --version` |
-| Clone | `git clone https://github.com/Tugaytalha/The-Builder.git && cd The-Builder` | the same |
+| Clone | `git clone https://github.com/resitaydin/voice-agent-builder.git && cd voice-agent-builder` | the same |
 | Virtual environment | `python3 -m venv .venv` | `python -m venv .venv` |
 | Dependencies | `.venv/bin/pip install -r requirements.txt` | `.venv\Scripts\pip install -r requirements.txt` |
 
