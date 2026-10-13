@@ -2,9 +2,9 @@
 
 **An AI agent that builds other AI agents.** It reads a bank's documents and creates a working phone agent on [Freya](https://www.freyavoice.ai), with no edits by hand.
 
-🏆 **[6th place](https://www.freyavoice.ai/hackathon#leaderboard)** at [Build the Builder — Freya × Y Combinator](https://www.freyavoice.ai/hackathon) (October 10–11, 2026). Team **Cracked Engineers**.
+🏆 **[6th place](https://www.freyavoice.ai/hackathon/leaderboard)** at [Build the Builder — Freya × Y Combinator](https://www.freyavoice.ai/hackathon) (October 10–11, 2026). Team **Cracked Engineers**.
 
-![Build the Builder — Freya × Y Combinator](docs/images/hackathon-banner.jpg)
+![Build the Builder — Freya × Y Combinator](docs/images/hackathon-cover.jpg)
 
 ## The problem
 
@@ -51,11 +51,11 @@ More detail: [docs/architecture.md](docs/architecture.md).
 
 ## Results
 
-[![Leaderboard, ranks 1–6](docs/images/leaderboard.png)](https://www.freyavoice.ai/hackathon#leaderboard)
+[![Leaderboard, ranks 1–6](docs/images/leaderboard.png)](https://www.freyavoice.ai/hackathon/leaderboard)
 
 | | |
 |---|---|
-| **Final rank** | 6th ([leaderboard](https://www.freyavoice.ai/hackathon#leaderboard)) |
+| **Final rank** | 6th ([leaderboard](https://www.freyavoice.ai/hackathon/leaderboard)) |
 | **Total score** | 64.4 / 100 |
 | **Simulation** | 78 of 120 hidden calls passed (65.0%), with all 13 happy-path calls passed |
 | **Workflow quality** | 38 / 60, the second-highest in the top 6. The reviewers found that "almost all logic is in the right layer, in code" and that "every spoken sentence comes from templates in code". |
@@ -102,7 +102,8 @@ python3 -m pytest builder/tests                          # tests
 ## Links
 
 - [Build the Builder hackathon page](https://www.freyavoice.ai/hackathon)
-- [Final leaderboard](https://www.freyavoice.ai/hackathon#leaderboard)
+- [Final leaderboard](https://www.freyavoice.ai/hackathon/leaderboard)
+- [Event page on Y Combinator](https://events.ycombinator.com/AI-FDE-Build-the-Builder)
 - [Freya](https://www.freyavoice.ai)
 - [Claude Agent SDK](https://docs.claude.com/en/docs/agent-sdk/overview)
 
