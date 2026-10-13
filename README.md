@@ -1,26 +1,109 @@
-# The-Builder
+# The Builder
 
-Our entry for the Freya "Build the Builder" hackathon: a builder that reads a bank's brief (one file, or a case folder of documents) and its tool API, and creates a Freya phone agent.
+**An AI agent that builds other AI agents.** It reads a bank's documents and creates a working phone agent on [Freya](https://www.freyavoice.ai), with no edits by hand.
 
-## Setup and run
+🏆 **6th place** at [Build the Builder — Freya × Y Combinator](https://www.freyavoice.ai/hackathon) (October 10–11, 2026). Team **Cracked Engineers**.
 
-The full guide, from a fresh machine to a finished build, for macOS, Linux and Windows, is in **[HOW_TO_RUN.md](HOW_TO_RUN.md)**: install, keys, Claude login, checks, the run, the final case, and what to do when it fails.
+![Build the Builder — Freya × Y Combinator](docs/images/hackathon-banner.jpg)
+
+## The problem
+
+A bank wants to phone customers who are late on a payment. The phone agent must check who is on the line, say what is owed, and record when the customer will pay. It must also follow the bank's rules: no debt talk before the identity check, no promise on a holiday, nothing said to a relative.
+
+Today a person reads the bank's specification and builds this agent by hand. For one bank, that takes days.
+
+The hackathon asked one question: **can a program do that work instead?**
+
+> You build an agent. It builds an agent. We test that agent.
+
+## What we built
+
+One command. A folder of bank documents goes in. A deployed, tested phone agent comes out.
 
 ```
-python3 builder/build.py {case_folder} {mock_url}          # the final case: a folder of documents and our mock
-python3 builder/build.py {brief_path} {tool_api_path}     # a practice brief and the kit's tool API file
+python3 builder/build.py {case_folder} {mock_url}
 ```
 
-## Layout
+The final case was given only at the end of the event: a Turkish credit-card debt line, as raw bank material (a brief, mails, meeting transcripts, an FAQ, a service contract, a PDF call flow). In three hours we had to build a mock of the bank's services and run the builder on documents it had never seen.
+
+## How it works
+
+```mermaid
+flowchart LR
+    A["Bank documents<br/>md, Word, PDF, Excel"] --> B["Read<br/>all docs into one brief"]
+    B --> C["Plan<br/>rule ledger + spec"]
+    C --> D["Generate<br/>workflow from tested blocks"]
+    D --> E["Check<br/>rule tests + linter"]
+    E --> F["Deploy<br/>to Freya through a gate"]
+    F --> G["Test<br/>scripted chat calls"]
+    G -->|defect found| D
+    G --> H["Phone agent<br/>+ trace"]
+```
+
+1. **Read.** `docs.py` turns the case folder into one brief. The tool API comes from the bank mock.
+2. **Plan.** A Claude Agent SDK run splits the brief into atomic rules (the *ledger*). Each rule gets a mechanism: code, a route, a tool, a fixed line, or a prompt. Later documents that change a rule (a memo, a forwarded mail) replace the old rule.
+3. **Generate.** The agent writes the workflow from tested building blocks: tool factories, node factories, identity checks, negotiation, date helpers.
+4. **Check.** A unit test for each rule in code, plus a linter for platform pitfalls. Nothing deploys until every check passes.
+5. **Deploy and test.** A deploy gate pushes the workflow to Freya. Then the agent runs scripted chat calls against it, fixes each failure, and deploys again. An independent reviewer subagent checks the result once.
+6. **Hand off.** A watchdog stops the run on time. The builder exports the final workflow and a full trace with the keys removed.
+
+More detail: [docs/architecture.md](docs/architecture.md).
+
+## Results
+
+![Leaderboard, ranks 4–10](docs/images/leaderboard.png)
+
+| | |
+|---|---|
+| **Final rank** | 6th ([leaderboard](https://www.freyavoice.ai/hackathon)) |
+| **Score** | 64.4 / 100 (65.0% of the hidden final cases passed) |
+| **Final case** | Turkish card statement debt, raw bank documents, hidden customers |
+| **Last internal test** | 27 of 50 simulated callers passed, up from 6 in the build before it ([notes](notes/final-case-c-persona-test.md)) |
+
+A case passes only when the bank's records are correct **and** the call followed the policy **and** the agent told the truth. There is no partial credit.
+
+## Team
+
+| | Main work |
+|---|---|
+| **Reşit Aydın** ([@resitaydin](https://github.com/resitaydin)) | The builder: Agent SDK harness, skill and platform knowledge, building blocks, checks, deploy gate and tests. The evaluation loop. The Cloudflare bank mock. The final-case runs and the submission. |
+| **Tugay Talha İçen** ([@Tugaytalha](https://github.com/Tugaytalha)) | The persona simulator: 50 simulated callers and judge reports on each final build. The reference agent. Windows support. The architecture document, the run guide and the jury presentation. |
+
+The original repository is [Tugaytalha/The-Builder](https://github.com/Tugaytalha/The-Builder).
+
+## Tech
+
+Python 3.12 · [Claude Agent SDK](https://docs.claude.com/en/docs/agent-sdk/overview) · Freya workflow API · Cloudflare Workers + Durable Objects (JavaScript) · pytest
+
+## Run it
+
+The full guide for macOS, Linux and Windows is in **[HOW_TO_RUN.md](HOW_TO_RUN.md)**: install, keys, checks, a run, and what to do when it fails.
+
+```
+python3 builder/build.py {case_folder} {mock_url}       # a folder of bank documents and its mock
+python3 builder/build.py {brief_path} {tool_api_path}   # a practice brief and its tool API file
+python3 -m pytest builder/tests                          # tests
+```
+
+## Repository layout
 
 | Path | What it is |
 |---|---|
-| `builder/build.py` | Entry point: trace, 27-minute watchdog, one Claude Agent SDK run, final deploy through the gate, export. |
-| `builder/blocks/` | The tested building blocks: case folder to text (`docs.py`), tools from any API file, node factories, proven patterns, date helpers, linter, loop-1 checks, deploy gate, chat smoke tests. |
-| `builder/.claude/skills/build-phone-agent/` | The skill the agent follows, the platform knowledge (`freya.md`) and a worked example on an invented brief. |
-| `builder/.claude/agents/reviewer.md` | The independent reviewer the agent asks before it hands off. |
-| `mock/` | The bank mock for the final case, a Cloudflare Worker with one Durable Object (`npx wrangler deploy`), live at `https://the-builder-mock.the-builder-freya.workers.dev`. `/health` answers `{"ok":true}`; `/openapi.json` gives the tool API; `/__log` (every request) and `/__reset` (back to the test customers) are for us. |
-| `eval/` | Our evaluation loop: variant briefs and cases, the runner, the contamination check, the edge-case generator. |
-| `notes/` | Platform spike results, baseline, evaluation log, the hidden-brief runbook. |
+| `builder/build.py` | Entry point: trace, watchdog, one Agent SDK run, final deploy, export. |
+| `builder/blocks/` | Tested building blocks: documents to text, tools, nodes, patterns, dates, linter, checks, deploy gate, smoke tests. |
+| `builder/.claude/` | The skill the agent follows, the Freya platform notes, a worked example, and the reviewer subagent. |
+| `mock/` | The bank mock: a Cloudflare Worker with one Durable Object. |
+| `eval/` | Our evaluation loop: variant briefs, cases, the runner, a contamination check, the persona simulator. |
+| `submission/`, `traces/` | The submitted workflows and the builder traces. |
+| `notes/` | Platform findings, the evaluation log, and the test reports. |
+| `presentation/` | The jury presentation (English and Turkish). |
 
-Tests: `python3 -m pytest builder/tests eval` (run `eval` tests from `eval/`).
+## Links
+
+- [Build the Builder hackathon page](https://www.freyavoice.ai/hackathon)
+- [Freya](https://www.freyavoice.ai)
+- [Claude Agent SDK](https://docs.claude.com/en/docs/agent-sdk/overview)
+
+## License
+
+[MIT](LICENSE) © 2026 Reşit Aydın and Tugay Talha İçen
